@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
@@ -61,7 +60,7 @@ const SimpleInput = (props) => {
         <label htmlFor="email">Email</label>
         <input
           type="text"
-          id="name"
+          id="email"
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
           value={enteredEmail}
