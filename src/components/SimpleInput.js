@@ -11,43 +11,33 @@ const SimpleInput = (props) => {
     reset: restNameInput,
   } = useInput((value) => value.trim() !== "");
 
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: restEmailInput,
+  } = useInput((value) => value.includes("@"));
 
-  const enteredEmailIsValid =
-    enteredEmail.trim() !== "" && enteredEmail.includes("@");
-  const emailInputIsInValid = !enteredEmailIsValid && enteredEmailTouched;
-
-  const formIsValid = enteredNameIsValid && emailInputIsInValid;
-
-  const emailInputChangeHandler = (event) => {
-    setEnteredEmail(event.target.value);
-  };
-
-  const emailInputBlurHandler = (event) => {
-    setEnteredEmailTouched(true);
-  };
+  const formIsValid = enteredNameIsValid && enteredEmailIsValid;
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
-    setEnteredEmailTouched(true);
-
-    if (!enteredNameIsValid || !enteredNameIsValid) {
+    if (!enteredNameIsValid || !enteredEmailIsValid) {
       return;
     }
 
     restNameInput();
-
-    setEnteredEmail("");
-    setEnteredEmailTouched(false);
+    restEmailInput();
   };
 
   const nameInputClasses = nameInputHasError
     ? "form-control invalid"
     : "form-control";
 
-  const emailInputClasses = emailInputIsInValid
+  const emailInputClasses = emailInputHasError
     ? "form-control invalid"
     : "form-control";
 
@@ -72,11 +62,11 @@ const SimpleInput = (props) => {
         <input
           type="text"
           id="name"
-          onChange={emailInputChangeHandler}
-          onBlur={emailInputBlurHandler}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
           value={enteredEmail}
         />
-        {emailInputIsInValid && (
+        {emailInputHasError && (
           <p className="error-text">
             Email must not be empty and should contain @
           </p>
